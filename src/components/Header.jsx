@@ -7,6 +7,7 @@ import Button from "./Button";
 import MenuSvg from "../assets/svg/MenuSvg";
 import { HamburgerMenu } from "./design/Header";
 import { useState } from "react";
+import { HashLink } from "react-router-hash-link";
 
 const Header = () => {
   const pathname = useLocation();
@@ -46,22 +47,30 @@ const Header = () => {
           } fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
         >
           <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
-            {navigation.map((item) => (
-              <a
-                key={item.id}
-                href={item.url}
-                onClick={handleClick}
-                className={`block relative font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 ${
+   
+{navigation.map((item) => {
+  // item.url is like "#roadmap"
+  const to = `/${item.url}`; // "/#roadmap"
+  const isActive = location.hash === item.url;
+
+  return (
+    <HashLink
+      key={item.id}
+      to={to}
+      smooth
+      onClick={handleClick}
+       className={`block relative font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 ${
                   item.onlyMobile ? "lg:hidden" : ""
                 } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
-                  item.url === pathname.hash
+                  item.url === location.hash
                     ? "z-2 lg:text-n-1"
                     : "lg:text-n-1/50"
                 } lg:leading-5 lg:hover:text-n-1 xl:px-12`}
               >
-                {item.title}
-              </a>
-            ))}
+      {item.title}
+    </HashLink>
+  );
+})}
           </div>
 
           <HamburgerMenu />
